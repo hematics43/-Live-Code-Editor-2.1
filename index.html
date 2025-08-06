@@ -60,11 +60,8 @@
       cursor: pointer;
     }
 
-    input[type="file"] {
-      padding: 4px;
-      background: white;
-      border-radius: 5px;
-      font-size: 14px;
+    button:hover {
+      background: #eee;
     }
 
     .editor-container {
@@ -100,6 +97,10 @@
       padding: 2px 6px;
       border-radius: 4px;
       margin-left: 4px;
+    }
+
+    .editor label button:hover {
+      background: #777;
     }
 
     .code-wrapper {
@@ -180,7 +181,6 @@
       font-size: 14px;
       color: #555;
       border-radius: 8px;
-    }
   </style>
 </head>
 <body>
@@ -192,16 +192,17 @@
     <button onclick="downloadZip()">Download ZIP</button>
     <button onclick="downloadHTML()">HTML Only</button>
     <button onclick="clearEditors()">Clear All</button>
-    <input type="file" id="file-upload" multiple accept=".html,.css,.js" />
+    <input type="file" id="upload" onchange="uploadFiles(event)" multiple style="display:none" />
+    <button onclick="document.getElementById('upload').click()">Upload (HTML,CSS,JavaScript)</button>
   </div>
 </header>
 
-<div class="editor-container">
+<div class="editor-container" ondrop="handleDrop(event)" ondragover="event.preventDefault()">
 
   <div class="editor">
     <label for="html">
       HTML
-      <div>
+      <div style="float: right;">
         <button onclick="copyCode('html')">Copy</button>
         <button onclick="clearEditor('html')">Clear</button>
       </div>
@@ -215,7 +216,7 @@
   <div class="editor">
     <label for="css">
       CSS
-      <div>
+      <div style="float: right;">
         <button onclick="copyCode('css')">Copy</button>
         <button onclick="clearEditor('css')">Clear</button>
       </div>
@@ -229,7 +230,7 @@
   <div class="editor">
     <label for="js">
       JavaScript
-      <div>
+      <div style="float: right;">
         <button onclick="copyCode('js')">Copy</button>
         <button onclick="clearEditor('js')">Clear</button>
       </div>
@@ -239,8 +240,6 @@
       <textarea id="js" oninput="updateLines('js')"></textarea>
     </div>
   </div>
-
-  <div class="drop-zone" id="drop-zone">Drag & Drop Files Here (.html, .css, .js)</div>
 
   <iframe id="preview"></iframe>
 </div>
@@ -301,13 +300,13 @@
   function clearEditor(id) {
     document.getElementById(id).value = '';
     updateLines(id);
-    updatePreview();
   }
 
   function copyCode(id) {
     const code = document.getElementById(id).value;
     navigator.clipboard.writeText(code);
   }
+
 
   function openIframeFullscreen() {
     const iframe = document.getElementById('preview');
@@ -320,45 +319,30 @@
     }
   }
 
-  function handleFileUpload(files) {
-    Array.from(files).forEach(file => {
+  function uploadFiles(event) {
+    const files = event.target.files;
+    for (const file of files) {
       const reader = new FileReader();
       reader.onload = e => {
-        const content = e.target.result;
-        if (file.name.endsWith('.html')) {
-          document.getElementById('html').value = content;
-          updateLines('html');
-        } else if (file.name.endsWith('.css')) {
-          document.getElementById('css').value = content;
-          updateLines('css');
-        } else if (file.name.endsWith('.js')) {
-          document.getElementById('js').value = content;
-          updateLines('js');
-        }
-        updatePreview();
+        if (file.name.endsWith('.html')) document.getElementById('html').value = e.target.result;
+        if (file.name.endsWith('.css')) document.getElementById('css').value = e.target.result;
+        if (file.name.endsWith('.js')) document.getElementById('js').value = e.target.result;
+        editors.forEach(updateLines);
       };
       reader.readAsText(file);
-    });
+    }
   }
 
-  document.getElementById('file-upload').addEventListener('change', e => {
-    handleFileUpload(e.target.files);
-  });
-
-  const dropZone = document.getElementById('drop-zone');
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, e => e.preventDefault());
-  });
-
-  dropZone.addEventListener('drop', e => {
-    handleFileUpload(e.dataTransfer.files);
-  });
+  function handleDrop(event) {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    uploadFiles({ target: { files } });
+  }
 
   window.onload = () => {
     editors.forEach(updateLines);
     updatePreview();
   };
 </script>
-
 </body>
 </html>
