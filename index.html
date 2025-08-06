@@ -60,8 +60,11 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background: #eee;
+    input[type="file"] {
+      padding: 4px;
+      background: white;
+      border-radius: 5px;
+      font-size: 14px;
     }
 
     .editor-container {
@@ -97,10 +100,6 @@
       padding: 2px 6px;
       border-radius: 4px;
       margin-left: 4px;
-    }
-
-    .editor label button:hover {
-      background: #777;
     }
 
     .code-wrapper {
@@ -174,8 +173,13 @@
       display: block;
     }
 
-    #fullscreen-btn:hover {
-      background: #005ecc;
+    .drop-zone {
+      border: 2px dashed #888;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -188,6 +192,7 @@
     <button onclick="downloadZip()">Download ZIP</button>
     <button onclick="downloadHTML()">HTML Only</button>
     <button onclick="clearEditors()">Clear All</button>
+    <input type="file" id="file-upload" multiple accept=".html,.css,.js" />
   </div>
 </header>
 
@@ -196,7 +201,7 @@
   <div class="editor">
     <label for="html">
       HTML
-      <div style="float: right;">
+      <div>
         <button onclick="copyCode('html')">Copy</button>
         <button onclick="clearEditor('html')">Clear</button>
       </div>
@@ -210,7 +215,7 @@
   <div class="editor">
     <label for="css">
       CSS
-      <div style="float: right;">
+      <div>
         <button onclick="copyCode('css')">Copy</button>
         <button onclick="clearEditor('css')">Clear</button>
       </div>
@@ -224,7 +229,7 @@
   <div class="editor">
     <label for="js">
       JavaScript
-      <div style="float: right;">
+      <div>
         <button onclick="copyCode('js')">Copy</button>
         <button onclick="clearEditor('js')">Clear</button>
       </div>
@@ -235,11 +240,12 @@
     </div>
   </div>
 
+  <div class="drop-zone" id="drop-zone">Drag & Drop Files Here (.html, .css, .js)</div>
+
   <iframe id="preview"></iframe>
 </div>
 
-<!-- Always-visible Fullscreen Preview Button -->
-<button id="fullscreen-btn" onclick="openFullscreen()">🔍 Fullscreen</button>
+<button id="fullscreen-btn" onclick="openIframeFullscreen()">🔍 Fullscreen</button>
 
 <script>
   const editors = ['html', 'css', 'js'];
@@ -285,7 +291,7 @@
   }
 
   function clearEditors() {
-    ['html', 'css', 'js'].forEach(id => {
+    editors.forEach(id => {
       document.getElementById(id).value = '';
       updateLines(id);
     });
@@ -303,16 +309,50 @@
     navigator.clipboard.writeText(code);
   }
 
-  function openFullscreen() {
-    const html = document.getElementById('html').value || '';
-    const css = "<style>" + (document.getElementById('css').value || '') + "</style>";
-    const js = "<script>" + (document.getElementById('js').value || '') + "<\/script>";
-    const code = html + css + js;
-    const win = window.open();
-    win.document.open();
-    win.document.write(code);
-    win.document.close();
+  function openIframeFullscreen() {
+    const iframe = document.getElementById('preview');
+    if (iframe.requestFullscreen) {
+      iframe.requestFullscreen();
+    } else if (iframe.webkitRequestFullscreen) {
+      iframe.webkitRequestFullscreen();
+    } else if (iframe.msRequestFullscreen) {
+      iframe.msRequestFullscreen();
+    }
   }
+
+  function handleFileUpload(files) {
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const content = e.target.result;
+        if (file.name.endsWith('.html')) {
+          document.getElementById('html').value = content;
+          updateLines('html');
+        } else if (file.name.endsWith('.css')) {
+          document.getElementById('css').value = content;
+          updateLines('css');
+        } else if (file.name.endsWith('.js')) {
+          document.getElementById('js').value = content;
+          updateLines('js');
+        }
+        updatePreview();
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  document.getElementById('file-upload').addEventListener('change', e => {
+    handleFileUpload(e.target.files);
+  });
+
+  const dropZone = document.getElementById('drop-zone');
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, e => e.preventDefault());
+  });
+
+  dropZone.addEventListener('drop', e => {
+    handleFileUpload(e.dataTransfer.files);
+  });
 
   window.onload = () => {
     editors.forEach(updateLines);
