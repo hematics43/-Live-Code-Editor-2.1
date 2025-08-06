@@ -94,8 +94,9 @@
       background: #555;
       color: white;
       font-size: 12px;
-      padding: 2px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
+      margin-left: 4px;
     }
 
     .editor label button:hover {
@@ -195,7 +196,10 @@
   <div class="editor">
     <label for="html">
       HTML
-      <button onclick="clearEditor('html')">Clear</button>
+      <div style="float: right;">
+        <button onclick="copyCode('html')">Copy</button>
+        <button onclick="clearEditor('html')">Clear</button>
+      </div>
     </label>
     <div class="code-wrapper">
       <div class="line-numbers" id="lines-html">1</div>
@@ -206,7 +210,10 @@
   <div class="editor">
     <label for="css">
       CSS
-      <button onclick="clearEditor('css')">Clear</button>
+      <div style="float: right;">
+        <button onclick="copyCode('css')">Copy</button>
+        <button onclick="clearEditor('css')">Clear</button>
+      </div>
     </label>
     <div class="code-wrapper">
       <div class="line-numbers" id="lines-css">1</div>
@@ -217,7 +224,10 @@
   <div class="editor">
     <label for="js">
       JavaScript
-      <button onclick="clearEditor('js')">Clear</button>
+      <div style="float: right;">
+        <button onclick="copyCode('js')">Copy</button>
+        <button onclick="clearEditor('js')">Clear</button>
+      </div>
     </label>
     <div class="code-wrapper">
       <div class="line-numbers" id="lines-js">1</div>
@@ -286,6 +296,11 @@
     document.getElementById(id).value = '';
     updateLines(id);
     updatePreview();
+  }
+
+  function copyCode(id) {
+    const code = document.getElementById(id).value;
+    navigator.clipboard.writeText(code);
   }
 
   function openFullscreen() {
