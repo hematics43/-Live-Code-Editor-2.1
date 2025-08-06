@@ -2,10 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Mobile Code Editor</title>
+  <title>📱 HTML Live Code Editor 2.1</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
+     .bottom-center-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 999;
+  }
+
+  .glow-button {
+    padding: 12px 24px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    background-color: #111;
+    box-shadow: 0 0 5px #00f2ff,
+                0 0 10px #00f2ff,
+                0 0 20px #00f2ff,
+                0 0 40px #00f2ff;
+    transition: all 0.3s ease;
+    font-family: sans-serif;
+  }
+
+  .glow-button:hover {
+    box-shadow: 0 0 10px #00f2ff,
+                0 0 20px #00f2ff,
+                0 0 40px #00f2ff,
+                0 0 60px #00f2ff;
+    background-color: #00aaff;
+    color: #fff;
+  }
     :root {
       --bg: #f0f0f0;
       --text: #111;
@@ -186,7 +219,7 @@
 <body>
 
 <header>
-  <div>📱 Code Editor</div>
+  <div>📱 HTML Live Code Editor 2.1</div>
   <div class="buttons">
     <button onclick="toggleTheme()">Toggle Theme</button>
     <button onclick="downloadZip()">Download ZIP</button>
@@ -344,5 +377,10 @@
     updatePreview();
   };
 </script>
+<div class="bottom-center-buttons">
+ 
+  <a href="https://hematics43.github.io/HTML-Code-Editor-1.0/" target="_blank" class="glow-button">HTML Code Editor 1.0</a>
+   <a href="https://hematics43.github.io/HTML-Live-Editor-2.0/" target="_blank" class="glow-button">HTML Live Editor 2.0</a>
+</div>
 </body>
 </html>
