@@ -12,50 +12,49 @@
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 20px;
+    gap: 15px;
     z-index: 999;
   }
 
   .glow-button {
     padding: 12px 24px;
-    color: white;
+    color: rgb(5, 2, 20);
     text-decoration: none;
     font-weight: bold;
-    border-radius: 8px;
-    background-color: #111;
+    border-radius: 15px;
+    background-color: #d4ce0a;
     box-shadow: 0 0 5px #00f2ff,
                 0 0 10px #00f2ff,
-                0 0 20px #00f2ff,
-                0 0 40px #00f2ff;
+                0 0 10px #00f2ff,
+                0 0 10px #00f2ff;
     transition: all 0.3s ease;
     font-family: sans-serif;
   }
-
   .glow-button:hover {
     box-shadow: 0 0 10px #00f2ff,
                 0 0 20px #00f2ff,
                 0 0 40px #00f2ff,
                 0 0 60px #00f2ff;
-    background-color: #00aaff;
+    background-color: #d1481a;
     color: #fff;
   }
     :root {
       --bg: #f0f0f0;
       --text: #111;
-      --editor-bg: #fff;
+      --editor-bg: #740f0f;
       --line-bg: #eee;
       --textarea-bg: #fff;
       --textarea-text: #000;
     }
 
     body.dark {
-      --bg: #121212;
-      --text: #fff;
+      --bg: #067ec8;
+      --text: #270d65;
       --editor-bg: #1e1e1e;
       --line-bg: #2a2a2a;
       --textarea-bg: #1e1e1e;
-      --textarea-text: #eee;
-    }
+      --textarea-text: #0cbb3d;
+    } 
 
     body {
       margin: 0;
@@ -69,13 +68,13 @@
 
     header {
       background: linear-gradient(to right, #007aff, #00c6ff);
-      color: white;
-      padding: 10px 16px;
+      color: rgb(10, 5, 6);
+      padding: 6px 16px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 1px;
     }
 
     .buttons {
@@ -85,20 +84,20 @@
     }
 
     button {
-      background: white;
+      background: rgb(135, 212, 205);
       border: none;
       border-radius: 5px;
       padding: 6px 12px;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
     }
 
     button:hover {
-      background: #eee;
+      background: #ffffff;
     }
 
     .editor-container {
-      flex: 1;
+      flex: 2;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -112,8 +111,8 @@
     }
 
     .editor label {
-      background: #333;
-      color: white;
+      background: #000000;
+      color: rgb(162, 219, 238);
       padding: 6px 10px;
       border-top-left-radius: 6px;
       border-top-right-radius: 6px;
@@ -124,7 +123,7 @@
     }
 
     .editor label button {
-      background: #555;
+      background: #c41b1b;
       color: white;
       font-size: 12px;
       padding: 2px 6px;
@@ -133,7 +132,7 @@
     }
 
     .editor label button:hover {
-      background: #777;
+      background: #ff0000;
     }
 
     .code-wrapper {
@@ -142,23 +141,23 @@
       border-bottom-left-radius: 6px;
       border-bottom-right-radius: 6px;
       overflow: hidden;
-      height: 30vh;
+      height: 20vh;
     }
 
     .line-numbers {
       background: var(--line-bg);
-      color: #999;
+      color: #0d0101;
       padding: 10px;
       font-family: monospace;
-      font-size: 13px;
+      font-size: 15px;
       white-space: pre;
       user-select: none;
     }
 
     textarea {
-      flex: 1;
+      flex: 10;
       padding: 10px;
-      font-size: 13px;
+      font-size: 15px;
       font-family: monospace;
       background: var(--textarea-bg);
       color: var(--textarea-text);
